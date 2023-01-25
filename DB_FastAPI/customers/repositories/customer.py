@@ -1,5 +1,6 @@
 import psycopg2
 from customers.models.customer import Customer
+from customers.models.address import Address
 
 class CustomerRepository():
     db_name = 'customers.db'
@@ -39,4 +40,8 @@ class CustomerRepository():
                 }
                 )
                 row = cursor.fetchone()
-                return Customer(id=row[0], FirstName=row[1], LastName=row[2], AddressId=row[3], Email=row[4])
+                if row:
+                    address = Address(id=row[3], address='', city='', state='', zip_code='')
+                    return Customer(id=row[0], first_name=row[1], last_name=row[2], address_id=address, email=row[4])
+                else:
+                    return None
