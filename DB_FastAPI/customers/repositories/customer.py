@@ -16,13 +16,13 @@ class CustomerRepository():
             with db.cursor() as cursor:
                 cursor.execute("""
                     INSERT INTO customer
-                        (FirstName, LastName, State, AddressID, Email) VALUES
+                        (FirstName, LastName, AddressID, Email) VALUES
                         (%(customer_first)s, %(customer_last)s, %(customer_addressid)s, %(customer_email)s)
                         RETURNING ID
                     """, {
                     'customer_first': customer.first_name,
                     'customer_last': customer.last_name,
-                    'customer_addressid': customer.address,
+                    'customer_addressid': customer.address.id,
                     'customer_email': customer.email
                 }
                 )

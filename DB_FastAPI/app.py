@@ -43,8 +43,8 @@ async def create_address(address: Address):
     return address_service.add_new(address)
 
 @app.post('/api/customer/new')
-async def create_customer(customer: Customer, address: Address):
-    return customer_service.add_new(customer, address)
+async def create_customer(customer: Customer):
+    return customer_service.add_new(customer)
 
 # @app.put('/api/products/{id}')
 # async def update_product(id, product: Product):

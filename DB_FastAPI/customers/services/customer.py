@@ -9,7 +9,5 @@ class CustomerService():
         self.address_repository = address_repository
 
 
-    def add_new(self, customer: Customer, address: Address):
-        address = self.address_repository.get_by_id(customer.address.id)
-        customer.address = address
+    def add_new(self, customer: Customer):
         return self.customer_repository.insert(customer)
