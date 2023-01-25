@@ -21,7 +21,7 @@ class AccountRepository():
         account.id = cursor.lastrowid
         return account
 
-    def retrieve_specific_account(self, accountNumber):
+    def get_by_num(self, accountNumber):
         with cursor.connect() as cursor:
             cursor.execute(
                 'SELECT ID, AccountNum, CustomerID, CurrentBalance FROM [account] WHERE AccountNum=?;', [accountNumber])
@@ -32,7 +32,7 @@ class AccountRepository():
             return None
 
 
-    def retrieve_all_accounts(self):
+    def get_all_accounts(self):
         with cursor.connect() as cursor:
             cursor.execute(
                 'SELECT * FROM account')
