@@ -4,46 +4,63 @@ from customers.models.customer import Customer
 from customers.models.address import Address
 
 class AccountRepository():
-    db_name = 'customers.db'
-
-    connection = psycopg2.connect(
-        host="localhost", #possibly change later!!
-        database="psycopgtest",  #possibly change later!!
-        user="postgres", #possibly change later!!
-        password=None,
-    )
-    connection.set_session(autocommit=True)
+    host = "localhost"
+    database = "orders"
+    user = "postgres"
+    password = "password123"
 
     def insert(self, account: Account):
-        with cursor.connect() as cursor:
-            cursor.execute('INSERT INTO [account] (AccountNum, CustomerID, CurrentBalance) VALUES \
-                (?, ?, ?)', [account.account_num, account.customer_id, account.current_balance])
-        account.id = cursor.lastrowid
+        with psycopg2.connect(host=self.host, database=self.database, user=self.user,
+                            password=self.password) as db:
+            with db.cursor() as cursor:
+                cursor.execute("""
+                INSERT INTO account
+                (AccountNum, CustomerID, CurrentBalance) VALUES
+                (%(account_num)s, %(customer_id)s, %(current_balance)s)
+                RETURNING ID
+                """, {
+                    'account_num': account.account_num,
+                    'customer_id': account.customer_id,
+                    'current_balance': account.current_balance
+                }
+                )
+                account.id = cursor.fetchone()[0]
         return account
 
     def get_by_num(self, accountNumber):
-        with cursor.connect() as cursor:
-            cursor.execute(
-                'SELECT ID, AccountNum, CustomerID, CurrentBalance FROM [account] WHERE AccountNum=?;', [accountNumber])
+        with psycopg2.connect(host=self.host, database=self.database, user=self.user,
+                        password=self.password) as db:
+            with db.cursor() as cursor:
+                cursor.execute("""
+                    SELECT ID, AccountNum, CustomerID, CurrentBalance FROM account WHERE AccountNum=%(accountNumber)s)
+                    """, {
+                        'accountNumber': accountNumber
+                    }
+                )
         row = cursor.fetchone()
         if row:
-            return Account(id=row[0], account_num=row[1], customer_id=row[2], current_balance=row[3])
+            customer = Customer(id=row[2], first_name='', last_name='', address_id='', email='')
+            return Account(id=row[0], account_num=row[1], customer_id=customer, current_balance=row[3])
         else:
             return None
 
 
     def get_all_accounts(self):
-        with cursor.connect() as cursor:
-            cursor.execute(
-                'SELECT * FROM account')
+        results = []
+        with psycopg2.connect(host=self.host, database=self.database, user=self.user,
+                        password=self.password) as db:
+            with db.cursor() as cursor:
+                cursor.execute("""
+                    SELECT ID, AccountNum, CustomerID, CurrentBalance FROM account
+                    """)
         accounts= cursor.fetchall()
         for row in accounts:
-            print("ID: ", row[0])
-            print("Account Number ", row[1])
-            print("Customer ID: ", row[2])
-            print("Current balance: ", row[3])
-            print("\n")
+            results.append(
+                Account(id=row[0], account_num=row[1], customer_id=row[2], current_balance=row)
+            )
         cursor.close()
+
+## Need to work on finishing/updating these other definitions out
 
     def withdraw(self, amount, accountNumber):
         with cursor.connect() as cursor:
