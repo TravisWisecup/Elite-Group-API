@@ -5,7 +5,7 @@ class AddressRepository():
     db_name = 'customers.db'
 
     host = "localhost"
-    database = "orders"
+    database = "psycopgtest"
     user = "postgres"
     password = "password123"
 
@@ -19,10 +19,10 @@ class AddressRepository():
                         (%(address_text)s, %(address_city)s, %(address_state)s, %(address_zipcode)s)
                         RETURNING ID
                     """, {
-                    'Address': address.address_text,
-                    'City': address.address_city,
-                    'State': address.address_state,
-                    'ZipCode': address.address_zipcode
+                    'address_text': address.address,
+                    'address_city': address.city,
+                    'address_state': address.state,
+                    'address_zipcode': address.zip_code
                 }
                 )
                 address.id = cursor.fetchone()[0]
@@ -33,7 +33,7 @@ class AddressRepository():
                               password=self.password) as db:
             with db.cursor() as cursor:
                 cursor.execute("""
-                    SELECT ID, Address, City, State, ZipCode FROM Address WHERE ID=%(id)s
+                    SELECT ID, Address, City, State, ZipCode FROM address WHERE ID=%(id)s
                     """, {
                     'id': id
                 }

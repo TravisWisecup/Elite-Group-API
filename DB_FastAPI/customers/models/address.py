@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from customers.models.account import Account
 
 class Address(BaseModel):
     id: int
