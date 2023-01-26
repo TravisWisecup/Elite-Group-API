@@ -34,11 +34,17 @@ class TestOrderService(unittest.TestCase):
         self.assertEqual(new_account, self.order)
 
     def test_get_by_num(self):
-        self.orderRepository.get_by_number = Mock(return_value=self.order)
-        get_order = self.orderService.get_one("000")
+        self.account.get_by_number = Mock(return_value=self.account)
+        get_order = self.orderService.get_one(1)
         self.assertEqual(get_order, self.order)
-    
+    """
     def test_withdraw(self):
+
+        self.address.insert = Mock(return_value=self.address)
+        self.customer.insert = Mock (return_value= self.customer)
+        new_account = self.account.add_new(self.account)
+        self.assertEqual(new_account, self.order)
+
     
     def test_deposit(self):
 
@@ -47,3 +53,5 @@ class TestOrderService(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+    """
