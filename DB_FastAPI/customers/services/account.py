@@ -30,3 +30,6 @@ class AccountService():
 
     def get_all(self):
         return self.account_repository.get_all_accounts()
+
+    def delete(self, account_num):
+        return self.account_repository.delete(account_num)

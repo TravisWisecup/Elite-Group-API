@@ -144,8 +144,7 @@ class AccountRepository():
             with db.cursor() as cursor:
                 cursor.execute("""
                     DELETE FROM account WHERE AccountNum=%(account_num)s
-                    DELETE FROM
                     """,
                     {
-                        account_num: account_num
+                        'account_num': account_num
                     })
