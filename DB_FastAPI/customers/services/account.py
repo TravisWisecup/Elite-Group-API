@@ -11,15 +11,15 @@ class AccountService():
         self.address_respository = address_repository
         self.customer_respository = customer_repository
 
-    def add_new(self, account: Account, customer: Customer, address: Address):
-        self.address_repository.insert(address)
-        customer.address_id = address.id
-        self.customer_repository.insert(customer)
-        account.customer_id = customer.id
+    def add_new(self, account: Account):
         return self.account_repository.insert(account)
 
     def get_by_num(self, account_number):
         account = self.account_repository.get_by_num(account_number)
+        customer = self.customer_respository.get_by_id(account.customer.id)
+        address = self.address_respository.get_by_id(customer.address.id)
+        customer.address = address
+        account.customer = customer
         return account
 
     def withdraw(self, withdrawal_amount):
@@ -31,4 +31,4 @@ class AccountService():
         return account
 
     def get_all(self):
-        return self.account_repository.get_all()
+        return self.account_repository.get_all_accounts()
