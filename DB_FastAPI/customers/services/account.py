@@ -1,6 +1,4 @@
 from customers.models.account import Account
-from customers.models.address import Address
-from customers.models.customer import Customer
 from customers.repositories.account import AccountRepository
 from customers.repositories.address import AddressRepository
 from customers.repositories.customer import CustomerRepository
@@ -22,12 +20,12 @@ class AccountService():
         account.customer = customer
         return account
 
-    def withdraw(self, withdrawal_amount):
-        account = self.account_repository.deposit(withdrawal_amount)
+    def withdraw(self, withdrawal_amount, account_num):
+        account = self.account_repository.withdraw(withdrawal_amount, account_num)
         return account
 
-    def deposit(self, deposit_amount):
-        account = self.account_repository.deposit(deposit_amount)
+    def deposit(self, deposit_amount, account_num):
+        account = self.account_repository.deposit(deposit_amount, account_num)
         return account
 
     def get_all(self):

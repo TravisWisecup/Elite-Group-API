@@ -46,6 +46,14 @@ async def create_address(address: Address):
 async def create_customer(customer: Customer):
     return customer_service.add_new(customer)
 
+@app.post('/api/account/withdraw')
+async def withdraw(amount, account_num):
+    return account_service.withdraw(amount, account_num)
+
+@app.post('/api/account/desposit')
+async def deposit(amount, account_num):
+    return account_service.deposit(amount, account_num)
+
 # @app.put('/api/products/{id}')
 # async def update_product(id, product: Product):
 #     product.id = id

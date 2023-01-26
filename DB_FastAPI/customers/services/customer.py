@@ -1,4 +1,3 @@
-from customers.models.address import Address
 from customers.models.customer import Customer
 from customers.repositories.address import AddressRepository
 from customers.repositories.customer import CustomerRepository
