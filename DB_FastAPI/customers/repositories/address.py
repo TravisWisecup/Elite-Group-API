@@ -39,4 +39,4 @@ class AddressRepository():
                 }
                 )
                 row = cursor.fetchone()
-                return Address(id=row[0], address=row[1], city=row[2], state=row[3], zipcode=row[4])
+                return Address(id=row[0], address=row[1], city=row[2], state=row[3], zip_code=row[4])

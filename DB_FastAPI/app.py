@@ -26,8 +26,8 @@ async def retrieve_accounts():
 
 
 @app.get('/api/accounts/{account_number}')
-async def retrieve_product_by_number(account_number):
-    account = account_service.get_one(account_number)
+async def retrieve_account_by_number(account_number):
+    account = account_service.get_by_num(account_number)
     if account:
         return account
     else:

@@ -32,17 +32,34 @@ class AccountRepository():
                         password=self.password) as db:
             with db.cursor() as cursor:
                 cursor.execute("""
-                    SELECT ID, AccountNum, CustomerID, CurrentBalance FROM account WHERE AccountNum=%(accountNumber)s)
+                    SELECT ID, AccountNum, CustomerID, CurrentBalance FROM account WHERE AccountNum=%(accountNumber)s
                     """, {
                         'accountNumber': accountNumber
                     }
                 )
-        row = cursor.fetchone()
-        if row:
-            customer = Customer(id=row[2], first_name='', last_name='', address='', email='')
-            return Account(id=row[0], account_num=row[1], customer=customer, current_balance=row[3])
-        else:
-            return None
+                account_row = cursor.fetchone()
+                if account_row:
+                    cursor.execute("""
+                        SELECT ID, FirstName, LastName, AddressID, Email FROM customer WHERE ID=%(customer_id)s
+                        """, {
+                            'customer_id': account_row[2]
+                        }
+                    )
+                    customer_row = cursor.fetchone()
+                    if customer_row:
+                        cursor.execute("""
+                            SELECT ID, Address, City, State, ZipCode FROM address WHERE ID=%(address_id)s
+                            """, {
+                                'address_id': customer_row[3]
+                            }
+                        )
+                    address_row = cursor.fetchone()
+                    if address_row:
+                        address = Address(id=address_row[0], address=address_row[1], city=address_row[2], state=address_row[3], zip_code=address_row[4])
+                        customer = Customer(id=customer_row[0], first_name=customer_row[1], last_name=customer_row[2], address=address, email=customer_row[3])
+                        return Account(id=account_row[0], account_num=account_row[1], customer=customer, current_balance=account_row[3])
+                    else:
+                        return None
 
 
     def get_all_accounts(self):
@@ -56,7 +73,7 @@ class AccountRepository():
         accounts= cursor.fetchall()
         for row in accounts:
             results.append(
-                Account(id=row[0], account_num=row[1], customer=row[2], current_balance=row)
+                Account(id=row[0], account_num=row[1], customer=row[2], current_balance=row[3])
             )
         cursor.close()
 
