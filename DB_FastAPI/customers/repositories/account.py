@@ -70,12 +70,13 @@ class AccountRepository():
                 cursor.execute("""
                     SELECT ID, AccountNum, CustomerID, CurrentBalance FROM account
                     """)
-        accounts= cursor.fetchall()
-        for row in accounts:
-            results.append(
-                Account(id=row[0], account_num=row[1], customer=row[2], current_balance=row[3])
-            )
-        cursor.close()
+                accounts= cursor.fetchall()
+                for row in accounts:
+                    results.append(
+                        Account(id=row[0], account_num=row[1], customer=row[2], current_balance=row[3])
+                    )
+                cursor.close()
+                return results
 
 ## Need to work on finishing/updating these other definitions out
 

@@ -31,4 +31,4 @@ class AccountService():
         return account
 
     def get_all(self):
-        return self.account_repository.get_all()
+        return self.account_repository.get_all_accounts()
